@@ -1,0 +1,103 @@
+body {
+    background-color: #1e1e1e;
+    background-image: url("../img/background.jpg");
+    color: white;
+}
+
+.home-container {
+    padding: 20px;
+    height: 100vh; /* Cambiado de min-height a height */
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    flex: 1;
+    display: flex;
+    align-items: flex-start; /* Cambiado de center a flex-start */
+    gap: 20px;
+}
+
+.menu-container {
+    background-color: #444;
+    border-radius: 10px;
+    padding: 20px;
+    width: 16.67vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    align-self: flex-start; /* Añadido para alinear el menú en la parte superior */
+    max-height: 80vh; /* Limita la altura del menú al 80% de la altura de la ventana */
+    overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+}
+
+.menu-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    transition: background-color 0.3s;
+}
+
+.menu-button:hover {
+    background-color: #555; /* Efecto hover para los botones */
+}
+
+.image-wrapper {
+    flex: 1;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; /* Mantiene la altura del contenedor de la imagen */
+    align-self: flex-start; /* Añadido para alinear con la parte superior */
+    overflow: hidden; /* Añadido para evitar que la imagen se salga del contenedor */
+}
+
+.image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover; /* Cambiado de contain a cover para llenar mejor el espacio */
+    width: auto; /* Asegura que la imagen ocupe todo el ancho */
+    height: auto; /* Asegura que la imagen ocupe toda la altura */
+}
+
+.beer-icon {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+}
+
+.help-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
