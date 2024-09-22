@@ -10,19 +10,7 @@ class Cerveza(models.Model):
     textura = models.CharField(max_length=255)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.nombre
-
-
-class Usuario(AbstractUser):
-    ROL_CHOICES = [
-        ('OPERARIO', 'Operario de Producción'),
-        ('COORDINADOR', 'Coordinador de Calidad'),
-        ('ADMIN', 'Administrador'),
-    ]
-    rol = models.CharField(max_length=20, choices=ROL_CHOICES)
-
- # Método para mostrar el nombre de la cerveza en las interfaces de Django
+    # Método para mostrar el nombre de la cerveza en las interfaces de Django
     def __str__(self):
         return self.nombre
 
@@ -38,4 +26,11 @@ class Usuario(AbstractUser):
         # Primero se llama a la validación antes de guardar
         self.clean()
         super(Cerveza, self).save(*args, **kwargs)
-    
+
+class Usuario(AbstractUser):
+    ROL_CHOICES = [
+        ('OPERARIO', 'Operario de Producción'),
+        ('COORDINADOR', 'Coordinador de Calidad'),
+        ('ADMIN', 'Administrador'),
+    ]
+    rol = models.CharField(max_length=20, choices=ROL_CHOICES)
