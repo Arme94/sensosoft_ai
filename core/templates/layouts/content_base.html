@@ -1,0 +1,29 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %} 
+
+{% block title %}SENSOSOFT IA - Inicio{% endblock %} 
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+{% endblock %} 
+
+
+{% block content %}
+<div class="container-fluid home-container">
+    <h1 class="text-center mb-4">SENSOSOFT IA</h1>
+
+    <div class="row">
+
+        {% include 'layouts/partials/nav.html' %}
+
+        {% block content_option %}
+        {% endblock %}
+        
+    </div>
+
+    <div class="help-icon">?</div>
+</div>
+{% endblock %}
+
+{% block footer_option %} {% endblock %}
