@@ -1,0 +1,10 @@
+{% extends 'layouts/content_base.html' %}
+{% load static %}
+
+{% block title %}SENSOSOFT IA - Usuario{% endblock %}
+
+{% block content_option %}
+    <form method="POST">
+        {% csrf_token %} {{ user_form.as_p }}
+    </form>
+{% endblock %}

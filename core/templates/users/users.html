@@ -1,0 +1,50 @@
+{% extends 'layouts/content_base.html' %}
+{% load static %}
+
+{% block title %}SENSOSOFT IA - Usuarios{% endblock %}
+
+{% block style_option %}
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock %}
+
+{% block content_option %}
+    <div class="users-container">
+        <h1 class="users-title">Lista de Usuarios</h1>
+        
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if users %}
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.email }}</td>
+                                <td class="actions">
+                                    <a href="{% url 'user_detail' user.id %}" class="btn btn-view">Ver</a>
+                                    <a href="{% url 'user_update' user.id %}" class="btn btn-update">Actualizar</a>
+                                    <form method="POST" action="{% url 'user_delete' user.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="no-users-message">No hay usuarios registrados</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        
+        <div class="create-user-container">
+            <a href="{% url 'user_create' %}" class="btn btn-create">Crear Nuevo Usuario</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,10 +1,9 @@
-{% extends 'layouts/content_base.html' %}
-{% load static %}
-
+{% extends 'layouts/content_base.html' %} {% load static %} 
+{% block style_option %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+{% endblock %}
 {% block content_option %}
-<div class="image-wrapper">
     <div class="image-container">
         <img src="{% static 'img/brewery.jpg' %}" alt="Brewery" />
     </div>
-</div>
 {% endblock %}

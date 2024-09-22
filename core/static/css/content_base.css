@@ -1,0 +1,78 @@
+body {
+    background-color: #1e1e1e;
+    background-image: url("../img/background.jpg");
+    color: white;
+}
+
+.home-container {
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.menu-container {
+    background-color: #444;
+    border-radius: 10px;
+    padding: 20px;
+    width: 16.67vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    align-self: flex-start;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.menu-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    transition: background-color 0.3s;
+}
+
+.menu-button:hover {
+    background-color: #555;
+}
+
+.cont-wrapper {
+    flex: 1;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    align-self: flex-start;
+    overflow: hidden;
+}
+
+.help-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
