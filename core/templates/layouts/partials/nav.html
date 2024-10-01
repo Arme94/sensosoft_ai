@@ -1,7 +1,11 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/nav.css' %}" />
+
 <div class="menu-container">
-    <button class="menu-button">INICIO</button>
-    <button class="menu-button">CONTROL DE USUARIO</button>
-    <button class="menu-button">REPORTES</button>
-    <button class="menu-button">PANEL</button>
-    <button class="menu-button">QUIENES SOMOS</button>
+    <a href="{% url 'home' %}" class="menu-button text">INICIO</a>
+    <a href="{% url 'users' %}" class="menu-button text">CONTROL DE USUARIO</a>
+    <a href="{% url 'reports' %}" class="menu-button text">REPORTES</a>
+    <a href="{% url 'panel' %}" class="menu-button text ">PANEL</a>
+    <a href="{% url 'who' %}" class="menu-button text">QUIENES SOMOS</a>
 </div>

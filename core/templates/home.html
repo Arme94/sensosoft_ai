@@ -1,9 +1,23 @@
-{% extends 'layouts/content_base.html' %} {% load static %} 
+{% extends 'layouts/content_base.html' %}
+{% load static %}
+
 {% block style_option %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+<link rel="stylesheet" href="{% static 'css/home.css' %}" />
 {% endblock %}
+
 {% block content_option %}
-    <div class="image-container">
-        <img src="{% static 'img/brewery.jpg' %}" alt="Brewery" />
-    </div>
+    <div class="content-container">
+        <h1 class="text-center">CERVECERÍA USACA</h1>
+        
+        <p class="text-center">
+            Somos la primera planta de producción de cerveza artesanal basada en la investigación y el conocimiento científico interdisciplinario, lo cual respalda la alta calidad y la excelencia de nuestros productos.
+        </p>
+        
+        <p class="text-center">
+            Somos promotores de la calidad de vida de las personas, al ofrecerles una bebida que trasciende los límites recreativos, para fortalecer su salud mediante ingredientes de la mejor calidad, probióticos, etapas de fermentación definidas rigurosamente, maquinaria y filtros de la más avanzada tecnología, contribuyendo así al buen funcionamiento del organismo humano.
+        </p>
+        
+        <div class="image-container">
+            <img src="{% static 'img/planta.png' %}" alt="Brewery" />
+        </div>
 {% endblock %}
