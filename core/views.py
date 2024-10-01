@@ -4,6 +4,9 @@ from django.http import HttpResponse
 from .models import Cerveza, Usuario
 from .forms import UsuarioForm
 
+def who(request):
+    return render(request, 'who.html',{})
+
 def login(request):
     return render(request, 'login.html', {})
 

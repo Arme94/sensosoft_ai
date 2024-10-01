@@ -16,6 +16,7 @@ body {
     ); /* Asegura que el contenedor ocupe casi toda la altura de la ventana */
 }
 
+
 .content-wrapper {
     background-color: #1e1e1e;
     border-radius: 10px;

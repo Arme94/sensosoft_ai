@@ -30,7 +30,7 @@
                                     <a href="{% url 'user_update' user.id %}" class="btn btn-update">Actualizar</a>
                                     <form method="POST" action="{% url 'user_delete' user.id %}" style="display: inline;">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">Eliminar</button>
+                                        <button type="submit" class="btn btn-delete" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">Inactivar</button>
                                     </form>
                                 </td>
                             </tr>
