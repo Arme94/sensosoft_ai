@@ -1,9 +1,12 @@
-from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
+
 from . import views
 
 urlpatterns = [
-    path('', views.login, name='login'),
+    path('', auth_views.LoginView.as_view(template_name="templates/registration/login.html"), name='login'),
+    path('logout/', views.logout, name='logout'),
+    
     path('home/', views.home, name='home'),
     path('users/', include('core.users.urls')),
     path('reports/', views.reports, name='reports'),
