@@ -82,10 +82,14 @@ WSGI_APPLICATION = 'sensosoft_ai.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
+DATABASES = {  
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'sensosoft_ai',  # Nombre de la base de datos
+        'USER': 'root',  # Usuario de MySQL
+        'PASSWORD': '',  # Contraseña de MySQL
+        'HOST': 'localhost',  # O la IP de tu servidor MySQL si no es local
+        'PORT': '3306',  # Puerto de MySQL (por defecto es 3306)
     }
 }
 
