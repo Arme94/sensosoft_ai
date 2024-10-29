@@ -2,6 +2,21 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Usuario
 from .forms import UsuarioForm
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('users/template/users.html')  # Cambia 'home' por la ruta a donde quieres redirigir tras el login
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos')
+    return render(request, 'users/template/login.html')
 
 def users(request):
     users = Usuario.objects.all()

@@ -25,3 +25,12 @@ Este proyecto utiliza **Django** como framework principal y está pensado para c
    ```bash
    git clone https://github.com/usuario/sensosoft_ai.git
    cd sensosoft_ai
+
+   pip install mysqlclient
+   python manage.py migrate
+## correr los tests
+   python manage.py test core.users
+## instalacion de libreria de test
+   pip install pytest pytest-django
+    
+
