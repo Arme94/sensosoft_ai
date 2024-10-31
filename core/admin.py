@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from core.users.models import Usuario
 from .models import Cerveza
 
 @admin.register(Cerveza)

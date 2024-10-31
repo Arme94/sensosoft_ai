@@ -81,7 +81,7 @@ class UsuarioTests(TestCase):
             'email': 'nuevo@test.com',
             'rol': 'OPERARIO'
         }
-        response = self.client.post(reverse('crear_usuario'), data)
+        response = self.client.post(reverse('user_create'), data)
         self.assertEqual(response.status_code, 302)  # Redirección después de la creación
         nuevo_usuario = Usuario.objects.get(username='nuevo_usuario')
         self.assertEqual(nuevo_usuario.first_name, 'Nuevo')
