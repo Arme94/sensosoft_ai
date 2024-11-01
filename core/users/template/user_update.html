@@ -3,9 +3,55 @@
 
 {% block title %}SENSOSOFT IA - Editar Usuario{% endblock %}
 
+{% block style_option %}
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock %}
+
 {% block content_option %}
-    <form method="POST">
-        {% csrf_token %} {{ user_form.as_p }}
-        <button type="submit">Editar Usuario</button>
+    <form method="POST" class="container">
+        {% csrf_token %}
+
+        <!-- Nombre y Apellido en la misma fila -->
+        <div class="row mb-3">
+            <div class="col-md-6 ps-2">
+                <label for="id_first_name">Nombre</label>
+                {{ user_form.first_name }}
+            </div>
+            <div class="col-md-6 pe-2">
+                <label for="id_last_name">Apellido</label>
+                {{ user_form.last_name }}
+            </div>
+        </div>
+
+        <!-- Nombre de Usuario, Correo, y Rol en la misma fila -->
+        <div class="row mb-3">
+            <div class="col-md-4 ps-2">
+                <label for="id_username">Nombre de Usuario</label>
+                {{ user_form.username }}
+            </div>
+            <div class="col-md-4 px-2">
+                <label for="id_email">Correo</label>
+                {{ user_form.email }}
+            </div>
+            <div class="col-md-4 pe-2">
+                <label for="id_rol">Rol</label>
+                {{ user_form.rol }}
+            </div>
+        </div>
+
+        <!-- Contraseña y Confirmación de Contraseña en la misma fila -->
+        <div class="row mb-3">
+            <div class="col-md-6 ps-2">
+                <label for="id_password1">Contraseña</label>
+                {{ user_form.password1 }}
+            </div>
+            <div class="col-md-6 pe-2">
+                <label for="id_password2">Confirmar Contraseña</label>
+                {{ user_form.password2 }}
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Crear Usuario</button>
     </form>
 {% endblock %}
