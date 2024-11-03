@@ -7,7 +7,7 @@
     {% if user.rol_id == 2%}
         <a href="{% url 'users' %}" class="menu-button text">CONTROL DE USUARIO</a>
     {% endif %}
-    {% if user.rol_id == 2 or user.rol_id == 1 %}
+    {% if user.rol_id == 2 or user.rol_id == 3 %}
         <a href="{% url 'reports' %}" class="menu-button text">REPORTES</a>
     {% endif %}
     <a href="{% url 'panel' %}" class="menu-button text ">PANEL</a>
