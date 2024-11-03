@@ -21,7 +21,7 @@
         <div class="row mb-3">
             <div class="col-md-6 ps-2">
                 <label for="id_first_name">Nombre</label>
-                {{ user_form.first_name }}
+                {{ user_form.first_name  }}
             </div>
             <div class="col-md-6 pe-2">
                 <label for="id_last_name">Apellido</label>
@@ -29,7 +29,6 @@
             </div>
         </div>
 
-        <!-- Nombre de Usuario, Correo, y Rol en la misma fila -->
         <div class="row mb-3">
             <div class="col-md-4 ps-2">
                 <label for="id_username">Nombre de Usuario</label>
@@ -45,6 +44,7 @@
             </div>
         </div>
         
-        <button type="submit" class="btn btn-primary mt-3">Crear Usuario</button>
+        <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+        <button type="button" class="btn btn-danger mt-3" onclick="window.location.href = '{% url 'users' %}'">Cancelar</button>
     </form>
 {% endblock %}

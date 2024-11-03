@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Usuario
-from .forms import UsuarioForm
+from .UserCreationForm import UsuarioCreationForm
+from .UserChangeForm import UsuarioChangeForm
 from django.contrib.auth import authenticate, login
 
 def user_login(request):
@@ -22,30 +23,30 @@ def users(request):
 
 def user_create(request):
     if request.method == 'POST':
-        user_form = UsuarioForm(request.POST)
+        user_form = UsuarioCreationForm(request.POST)
         if user_form.is_valid():
             user_form.save()
             return redirect('users')
     else:
-        user_form = UsuarioForm()
+        user_form = UsuarioCreationForm()
     return render(request, 'users/template/user_create.html', {'user_form': user_form})
 
 def user_detail(request, id):
     user = Usuario.objects.get(id=id)
-    user_form = UsuarioForm(instance=user)
+    user_form = UsuarioChangeForm(instance=user)
     return render(request, 'users/template/user_detail.html', {'user_form': user_form})    
 
 def user_update(request, id):
     user = get_object_or_404(Usuario, id=id)
 
     if request.method == 'POST':
-        user_form = UsuarioForm(request.POST, instance=user)
+        user_form = UsuarioChangeForm(request.POST, instance=user)
         if user_form.is_valid():
             user_form.save()
             messages.success(request, 'Usuario actualizado correctamente.')
             return redirect('user_detail', id=id)
     else:
-        user_form = UsuarioForm(instance=user)
+        user_form = UsuarioChangeForm(instance=user)
     
     return render(request, 'users/template/user_update.html', {'user_form': user_form})
 
