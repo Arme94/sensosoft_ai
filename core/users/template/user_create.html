@@ -11,6 +11,13 @@
     <form method="POST" class="container">
         {% csrf_token %}
 
+        {% for field in user_form %}
+            {% if field.errors %}
+                <div class="alert alert-danger">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        {% endfor %}
         <div class="row mb-3">
             <div class="col-md-6 ps-2">
                 <label for="id_first_name">Nombre</label>
@@ -40,13 +47,16 @@
         <div class="row mb-3">
             <div class="col-md-6 ps-2">
                 <label for="id_password1">Contraseña</label>
-                {{ user_form.password1 }}
+                {% comment %} {{ user_form.password1.as_widget(attrs={'class': 'form-control required-field', 'required': 'required'}) }}
+                {{ user_form.password1.help_text }} {% endcomment %}
+                 {{ user_form.password1 }}
             </div>
             <div class="col-md-6 pe-2">
                 <label for="id_password2">Confirmar Contraseña</label>
+                {% comment %} {{ user_form.password2.as_widget(attrs={'class': 'form-control required-field', 'required': 'required'}) }}
+                {{ user_form.password2.help_text }} {% endcomment %}
                 {{ user_form.password2 }}
             </div>
-
         </div>
 
         <button type="submit" class="btn btn-primary mt-3">Crear Usuario</button>

@@ -3,7 +3,6 @@ from django.contrib import messages
 from .models import Usuario
 from .forms import UsuarioForm
 from django.contrib.auth import authenticate, login
-from django.contrib import messages
 
 def user_login(request):
     if request.method == 'POST':

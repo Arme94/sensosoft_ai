@@ -11,7 +11,13 @@
     <form method="POST" class="container">
         {% csrf_token %}
 
-        <!-- Nombre y Apellido en la misma fila -->
+        {% for field in user_form %}
+            {% if field.errors %}
+                <div class="alert alert-danger">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        {% endfor %}
         <div class="row mb-3">
             <div class="col-md-6 ps-2">
                 <label for="id_first_name">Nombre</label>
@@ -38,20 +44,7 @@
                 {{ user_form.rol }}
             </div>
         </div>
-
-        <!-- Contraseña y Confirmación de Contraseña en la misma fila -->
-        <div class="row mb-3">
-            <div class="col-md-6 ps-2">
-                <label for="id_password1">Contraseña</label>
-                {{ user_form.password1 }}
-            </div>
-            <div class="col-md-6 pe-2">
-                <label for="id_password2">Confirmar Contraseña</label>
-                {{ user_form.password2 }}
-            </div>
-
-        </div>
-
+        
         <button type="submit" class="btn btn-primary mt-3">Crear Usuario</button>
     </form>
 {% endblock %}
