@@ -2,20 +2,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout  # Importa logout con un alias
 from django.contrib.auth import logout
+from django.contrib import messages
 from .models import Cerveza
 
 def login(request):
     return render(request, 'login.html', {})  # Asegúrate de usar la plantilla de login
 
-def logout_view(request):  # Renombra la función de cierre de sesión
+def logout_view(request):
     auth_logout(request)
     return redirect('login')
 
 def login(request):
     return render(request, 'home.html', {})
 
-def logout(request):
+def logout(request):    
     logout(request)
+    storage = messages.get_messages(request)
+    storage.used = True  # Marca todos los mensajes como usados
     return redirect('login')
 
 @login_required

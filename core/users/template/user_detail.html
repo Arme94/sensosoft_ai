@@ -1,10 +1,53 @@
 {% extends 'layouts/content_base.html' %}
 {% load static %}
 
-{% block title %}SENSOSOFT IA - Usuario{% endblock %}
+{% block title %}SENSOSOFT IA - Editar Usuario{% endblock %}
+
+{% block style_option %}
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock %}
+
+{% load custom_filters %}
 
 {% block content_option %}
-    <form method="POST">
-        {% csrf_token %} {{ user_form.as_p }}
+    <form method="POST" class="container">
+        {% csrf_token %}
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row mb-3">
+            <div class="col-md-6 ps-2">
+                <label for="id_first_name">Nombre</label>
+                {{ user_form.first_name|attr:"disabled:true" }}
+            </div>
+            <div class="col-md-6 pe-2">
+                <label for="id_last_name">Apellido</label>
+                {{ user_form.last_name|attr:"disabled:true" }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4 ps-2">
+                <label for="id_username">Nombre de Usuario</label>
+                {{ user_form.username|attr:"disabled:true" }}
+            </div>
+            <div class="col-md-4 px-2">
+                <label for="id_email">Correo</label>
+                {{ user_form.email|attr:"disabled:true" }}
+            </div>
+            <div class="col-md-4 pe-2">
+                <label for="id_rol">Rol</label>
+                {{ user_form.rol|attr:"disabled:true" }}
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'user_create' %}" class="btn btn-success">Crear Usuario</a>
+            <a href="{% url 'users' %}" class="btn btn-secondary">Listar Usuarios</a>
+        </div>
     </form>
 {% endblock %}

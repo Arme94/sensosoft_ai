@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Usuario
-from .forms import UsuarioForm
+from .UserCreationForm import UsuarioCreationForm
+from .UserChangeForm import UsuarioChangeForm
 from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.messages import get_messages
 
 def user_login(request):
+    storage = get_messages(request)
+    for _ in storage:
+        pass
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -24,28 +28,35 @@ def users(request):
 
 def user_create(request):
     if request.method == 'POST':
-        user_form = UsuarioForm(request.POST)
+        user_form = UsuarioCreationForm(request.POST)
         if user_form.is_valid():
             user_form.save()
             return redirect('users')
     else:
-        user_form = UsuarioForm()
+        user_form = UsuarioCreationForm()
     return render(request, 'users/template/user_create.html', {'user_form': user_form})
 
 def user_detail(request, id):
-    user = Usuario.objects.get(id=id)
-    user_form = UsuarioForm(instance=user)
+    user = get_object_or_404(Usuario, id=id)
+
+    storage = get_messages(request)
+    for _ in storage:
+        pass
+
+    user_form = UsuarioChangeForm(instance=user)
     return render(request, 'users/template/user_detail.html', {'user_form': user_form})    
 
 def user_update(request, id):
-    user = Usuario.objects.get(id=id)
+    user = get_object_or_404(Usuario, id=id)
+
     if request.method == 'POST':
-        user_form = UsuarioForm(request.POST, instance=user)
+        user_form = UsuarioChangeForm(request.POST, instance=user)
         if user_form.is_valid():
             user_form.save()
-            return redirect('users/template/user_detail', id=id)
+            messages.success(request, 'Usuario actualizado correctamente.')
+            return redirect('user_detail', id=id)
     else:
-        user_form = UsuarioForm(instance=user)
+        user_form = UsuarioChangeForm(instance=user)
     
     return render(request, 'users/template/user_update.html', {'user_form': user_form})
 
