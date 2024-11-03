@@ -4,8 +4,13 @@ from .models import Usuario
 from .UserCreationForm import UsuarioCreationForm
 from .UserChangeForm import UsuarioChangeForm
 from django.contrib.auth import authenticate, login
+from django.contrib.messages import get_messages
 
 def user_login(request):
+    storage = get_messages(request)
+    for _ in storage:
+        pass
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -32,7 +37,12 @@ def user_create(request):
     return render(request, 'users/template/user_create.html', {'user_form': user_form})
 
 def user_detail(request, id):
-    user = Usuario.objects.get(id=id)
+    user = get_object_or_404(Usuario, id=id)
+
+    storage = get_messages(request)
+    for _ in storage:
+        pass
+
     user_form = UsuarioChangeForm(instance=user)
     return render(request, 'users/template/user_detail.html', {'user_form': user_form})    
 

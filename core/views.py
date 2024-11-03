@@ -8,16 +8,17 @@ from .models import Cerveza
 def login(request):
     return render(request, 'login.html', {})  # Asegúrate de usar la plantilla de login
 
-def logout_view(request):  # Renombra la función de cierre de sesión    
+def logout_view(request):
     auth_logout(request)
     return redirect('login')
 
 def login(request):
-    messages.error(request, '')
     return render(request, 'home.html', {})
 
-def logout(request):
+def logout(request):    
     logout(request)
+    storage = messages.get_messages(request)
+    storage.used = True  # Marca todos los mensajes como usados
     return redirect('login')
 
 @login_required

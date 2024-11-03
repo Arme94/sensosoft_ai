@@ -44,7 +44,10 @@
             </div>
         </div>
         
-        <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-        <button type="button" class="btn btn-danger mt-3" onclick="window.location.href = '{% url 'users' %}'">Cancelar</button>
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href = '{% url 'users' %}'">Cancelar</button>
+        </div>
+        
     </form>
 {% endblock %}

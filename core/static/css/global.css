@@ -97,3 +97,24 @@ h1 {
 .text-muted {
     color: #a0a0a0 !important;
 }
+
+form label {
+    font-weight: bold;
+    color: #ddd;
+}
+
+form .form-control {
+    background-color: #3a3a3a;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+.form-control:disabled {
+    color: black;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
