@@ -13,4 +13,5 @@ urlpatterns = [
     path('panel/', views.panel, name='panel'),
     path('about/', views.about, name='about'),
     path('who/quienesomos', views.who, name='who')
+    
 ]

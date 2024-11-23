@@ -1,0 +1,169 @@
+{% extends 'layouts/content_base.html' %}
+{% load static %}
+
+{% block style_option %}
+<link rel="stylesheet" href="{% static 'css/panel.css' %}" />
+{% endblock %}
+
+{% block content_option %}
+<div class="container-fluid">
+    <h1 class="text-center">Análisis Sensorial de Cervezas</h1>
+
+    <!-- Contenedor de campos de entrada -->
+    <div class="inputs-container">
+        <input type="number" id="inputAroma" placeholder="Aroma (0-5)" step="0.1" min="0" max="5">
+        <input type="number" id="inputSabor" placeholder="Sabor (0-5)" step="0.1" min="0" max="5">
+        <input type="number" id="inputColor" placeholder="Color (0-5)" step="0.1" min="0" max="5">
+        <input type="number" id="inputTextura" placeholder="Textura (0-5)" step="0.1" min="0" max="5">
+        <button id="downloadPdf">Exportar PDF</button>
+    </div>
+
+    <!-- Contenedor de botones de predicción y detección -->
+    <div class="button-container">
+        <button id="predictResults">Predicción de Resultados</button>
+        <button id="detectAnomalies">Detección de Anomalías</button>
+    </div>
+
+    <!-- Contenedor de las gráficas -->
+    <div class="chart-grid">
+        <div class="chart-item">
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div class="chart-item">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart-item">
+            <canvas id="lineChart"></canvas>
+        </div>
+        <div class="chart-item">
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const initialData = {
+            labels: ['Muestra 1', 'Muestra 2', 'Muestra 3', 'Muestra 4'],
+            aroma: [4, 3, 4.5, 4.2],
+            flavor: [3.5, 4, 4.2, 3.9],
+            color: [3, 4, 3.5, 3.8],
+            texture: [4.2, 3.8, 4, 4.1]
+        };
+
+        let chartInstances = [];
+
+        function renderCharts(data) {
+            const chartConfigs = [
+                { id: 'radarChart', type: 'radar', title: 'Radar Sensorial', datasets: getRadarDatasets(data) },
+                { id: 'barChart', type: 'bar', title: 'Barras Promedio', datasets: getBarDataset(data) },
+                { id: 'lineChart', type: 'line', title: 'Líneas Comparativas', datasets: getLineDatasets(data) },
+                { id: 'pieChart', type: 'pie', title: 'Distribución Sensorial', datasets: getPieDataset(data) }
+            ];
+
+            // Destruir gráficos previos
+            chartInstances.forEach(chart => chart.destroy());
+            chartInstances = [];
+
+            chartConfigs.forEach(config => {
+                const ctx = document.getElementById(config.id).getContext('2d');
+                chartInstances.push(
+                    new Chart(ctx, {
+                        type: config.type,
+                        data: {
+                            labels: data.labels,
+                            datasets: config.datasets
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: config.title
+                                }
+                            }
+                        }
+                    })
+                );
+            });
+        }
+
+        function getRadarDatasets(data) {
+            return [
+                { label: 'Aroma', data: data.aroma, borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' },
+                { label: 'Sabor', data: data.flavor, borderColor: 'rgba(54, 162, 235, 1)', backgroundColor: 'rgba(54, 162, 235, 0.2)' },
+                { label: 'Color', data: data.color, borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)' },
+                { label: 'Textura', data: data.texture, borderColor: 'rgba(153, 102, 255, 1)', backgroundColor: 'rgba(153, 102, 255, 0.2)' }
+            ];
+        }
+
+        function getBarDataset(data) {
+            return [{
+                label: 'Promedio',
+                data: [average(data.aroma), average(data.flavor), average(data.color), average(data.texture)],
+                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)'],
+                borderWidth: 1
+            }];
+        }
+
+        function getLineDatasets(data) {
+            return [
+                { label: 'Aroma', data: data.aroma, borderColor: 'rgba(255, 99, 132, 1)', fill: false },
+                { label: 'Sabor', data: data.flavor, borderColor: 'rgba(54, 162, 235, 1)', fill: false },
+                { label: 'Color', data: data.color, borderColor: 'rgba(75, 192, 192, 1)', fill: false },
+                { label: 'Textura', data: data.texture, borderColor: 'rgba(153, 102, 255, 1)', fill: false }
+            ];
+        }
+
+        function getPieDataset(data) {
+            return [{
+                data: [average(data.aroma), average(data.flavor), average(data.color), average(data.texture)],
+                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)']
+            }];
+        }
+
+        function average(array) {
+            const sum = array.reduce((acc, val) => acc + val, 0);
+            return sum / array.length;
+        }
+
+        // Inicializar los gráficos
+        renderCharts(initialData);
+
+        document.getElementById("downloadPdf").addEventListener("click", () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Título y texto "quemado"
+            doc.setFontSize(18);
+            doc.text('Informe de Análisis Sensorial de la Cerveza', 10, 10);
+            doc.setFontSize(12);
+            doc.text('El perfil sensorial muestra un excelente equilibrio en aroma y color, con oportunidades de mejora en sabor.', 10, 20);
+            doc.text('Se recomienda ajustar el tiempo de fermentación para estabilizar el sabor.', 10, 30);
+            doc.text('En general, el producto tiene un perfil atractivo para el consumidor.', 10, 40);
+
+            // Valores de la Evaluación Sensorial
+            doc.text(`Aroma: ${average(initialData.aroma).toFixed(2)}`, 10, 50);
+            doc.text(`Sabor: ${average(initialData.flavor).toFixed(2)}`, 10, 60);
+            doc.text(`Color: ${average(initialData.color).toFixed(2)}`, 10, 70);
+            doc.text(`Textura: ${average(initialData.texture).toFixed(2)}`, 10, 80);
+
+            // Añadir gráficos
+            doc.addPage();
+
+            // Incluir el gráfico de Radar
+            const radarCanvas = document.getElementById('radarChart');
+            doc.addImage(radarCanvas.toDataURL('image/png'), 'PNG', 10, 60, 180, 120);
+
+            // Incluir el gráfico de Barras
+            const barCanvas = document.getElementById('barChart');
+            doc.addImage(barCanvas.toDataURL('image/png'), 'PNG', 10, 180, 180, 120);
+
+            // Guardar el PDF
+            doc.save('Informe_Analisis_Sensorial.pdf');
+        });
+    });
+</script>
+{% endblock %}

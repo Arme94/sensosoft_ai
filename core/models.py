@@ -26,4 +26,24 @@ class Cerveza(models.Model):
         # Primero se llama a la validación antes de guardar
         self.clean()
         super(Cerveza, self).save(*args, **kwargs)
+        
+class Beer(models.Model):
+    name = models.CharField(max_length=100)
+    aroma = models.FloatField()
+    flavor = models.FloatField()
+    color = models.FloatField()
+    texture = models.FloatField()
+    overall_score = models.FloatField()
+
+    def __str__(self):
+        return self.name
+
+class SensoryEvaluation(models.Model):
+    beer = models.ForeignKey(Beer, on_delete=models.CASCADE)
+    evaluator_name = models.CharField(max_length=100)
+    evaluation_date = models.DateField(auto_now_add=True)
+    comments = models.TextField()
+
+    def __str__(self):
+        return f"Evaluation of {self.beer.name} by {self.evaluator_name}"
 

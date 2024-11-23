@@ -67,3 +67,17 @@ def user_delete(request, id):
         messages.success(request, 'Usuario eliminado correctamente.')
         return redirect('users')
     return render(request, 'users/template/user_delete.html', {'user': user})
+
+def update_user_info(request, id):
+    user = get_object_or_404(Usuario, id=id)
+
+    if request.method == 'POST':
+        user_form = UsuarioChangeForm(request.POST, instance=user)
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request, 'Información actualizada correctamente.')
+            return redirect('users')
+    else:
+        user_form = UsuarioChangeForm(instance=user)
+    
+    return render(request, 'users/template/update_user_info.html', {'user_form': user_form})
