@@ -1,0 +1,42 @@
+{% extends 'layouts/content_base.html' %}
+{% load static %}
+
+{% block title %}SENSOSOFT IA - Cambiar Contraseña{% endblock %}
+
+{% block style_option %}
+    <link rel="stylesheet" href="{% static 'css/users.css' %}">
+{% endblock %}
+
+{% block content_option %}
+    <form method="POST" class="container">
+        {% csrf_token %}
+
+        {% for field in user_form %}
+            {% if field.errors %}
+                <div class="alert alert-danger">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="row mb-3">
+            <div class="col-md-4 ps-2">
+                <label for="id_old_password">Contraseña Vieja</label>
+                <input type="password" name="old_password" id="id_old_password" class="form-control">
+            </div>
+            <div class="col-md-4 px-2">
+                <label for="id_new_password">Nueva Contraseña</label>
+                <input type="password" name="new_password" id="id_new_password" class="form-control">
+            </div>
+            <div class="col-md-4 pe-2">
+                <label for="id_confirm_password">Repetir Contraseña</label>
+                <input type="password" name="confirm_password" id="id_confirm_password" class="form-control">
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href = '{% url 'users' %}'">Cancelar</button>
+        </div>
+        
+    </form>
+{% endblock %}

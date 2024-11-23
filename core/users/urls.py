@@ -9,4 +9,5 @@ urlpatterns = [
     path('detail/<int:id>', login_required(views.user_detail), name='user_detail'),
     path('user_update/<int:id>', login_required(views.user_update), name='user_update'),
     path('delete/<int:id>', login_required(views.user_delete), name='user_delete'),
+    path('update_user_info/<int:id>', login_required(views.update_user_info), name='update_user_info'),
 ]
