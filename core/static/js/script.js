@@ -32,6 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Fetch data from the backend
+    const fetchData = async () => {
+        try {
+            const response = await fetch('/api/get-sensorial-data/');
+            const data = await response.json();
+            if (response.ok) {
+                renderCharts(data);
+            } else {
+                showResult(`Error: ${data.error || 'Algo salió mal.'}`);
+            }
+        } catch (error) {
+            showResult(`Error de conexión: ${error.message}`);
+        }
+    };
+
+    // Call fetchData on page load
+    fetchData();
+
     // Eventos de los botones
     generateReportBtn.addEventListener('click', () => {
         callAPI('/api/generate-report/');

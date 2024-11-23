@@ -11,10 +11,12 @@
 
     <!-- Contenedor de campos de entrada -->
     <div class="inputs-container">
+        <input type="text" id="inputName" placeholder="Nombre de la Cerveza">
         <input type="number" id="inputAroma" placeholder="Aroma (0-5)" step="0.1" min="0" max="5">
         <input type="number" id="inputSabor" placeholder="Sabor (0-5)" step="0.1" min="0" max="5">
         <input type="number" id="inputColor" placeholder="Color (0-5)" step="0.1" min="0" max="5">
         <input type="number" id="inputTextura" placeholder="Textura (0-5)" step="0.1" min="0" max="5">
+        <button id="saveData">Guardar Datos</button>
         <button id="downloadPdf">Exportar PDF</button>
     </div>
 
@@ -45,17 +47,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const initialData = {
-            labels: ['Muestra 1', 'Muestra 2', 'Muestra 3', 'Muestra 4'],
-            aroma: [4, 3, 4.5, 4.2],
-            flavor: [3.5, 4, 4.2, 3.9],
-            color: [3, 4, 3.5, 3.8],
-            texture: [4.2, 3.8, 4, 4.1]
-        };
-
         let chartInstances = [];
+        let currentData = {};
 
         function renderCharts(data) {
+            currentData = data; // Save the current data for later use
             const chartConfigs = [
                 { id: 'radarChart', type: 'radar', title: 'Radar Sensorial', datasets: getRadarDatasets(data) },
                 { id: 'barChart', type: 'bar', title: 'Barras Promedio', datasets: getBarDataset(data) },
@@ -129,8 +125,23 @@
             return sum / array.length;
         }
 
-        // Inicializar los gráficos
-        renderCharts(initialData);
+        // Fetch data from the backend
+        const fetchData = async () => {
+            try {
+                const response = await fetch('/api/get-sensorial-data/');
+                const data = await response.json();
+                if (response.ok) {
+                    renderCharts(data);
+                } else {
+                    console.error(`Error: ${data.error || 'Algo salió mal.'}`);
+                }
+            } catch (error) {
+                console.error(`Error de conexión: ${error.message}`);
+            }
+        };
+
+        // Call fetchData on page load
+        fetchData();
 
         document.getElementById("downloadPdf").addEventListener("click", () => {
             const { jsPDF } = window.jspdf;
@@ -145,24 +156,59 @@
             doc.text('En general, el producto tiene un perfil atractivo para el consumidor.', 10, 40);
 
             // Valores de la Evaluación Sensorial
-            doc.text(`Aroma: ${average(initialData.aroma).toFixed(2)}`, 10, 50);
-            doc.text(`Sabor: ${average(initialData.flavor).toFixed(2)}`, 10, 60);
-            doc.text(`Color: ${average(initialData.color).toFixed(2)}`, 10, 70);
-            doc.text(`Textura: ${average(initialData.texture).toFixed(2)}`, 10, 80);
+            doc.text(`Aroma: ${average(currentData.aroma).toFixed(2)}`, 10, 50);
+            doc.text(`Sabor: ${average(currentData.flavor).toFixed(2)}`, 10, 60);
+            doc.text(`Color: ${average(currentData.color).toFixed(2)}`, 10, 70);
+            doc.text(`Textura: ${average(currentData.texture).toFixed(2)}`, 10, 80);
 
             // Añadir gráficos
+            const addChartToPDF = (canvasId, x, y, width, height) => {
+                const canvas = document.getElementById(canvasId);
+                const imgData = canvas.toDataURL('image/png');
+                doc.addImage(imgData, 'PNG', x, y, width, height);
+            };
+
+            addChartToPDF('radarChart', 10, 90, 90, 90);
+            addChartToPDF('barChart', 110, 90, 90, 90);
             doc.addPage();
-
-            // Incluir el gráfico de Radar
-            const radarCanvas = document.getElementById('radarChart');
-            doc.addImage(radarCanvas.toDataURL('image/png'), 'PNG', 10, 60, 180, 120);
-
-            // Incluir el gráfico de Barras
-            const barCanvas = document.getElementById('barChart');
-            doc.addImage(barCanvas.toDataURL('image/png'), 'PNG', 10, 180, 180, 120);
+            addChartToPDF('lineChart', 10, 20, 90, 90);
+            addChartToPDF('pieChart', 110, 20, 90, 90);
 
             // Guardar el PDF
             doc.save('Informe_Analisis_Sensorial.pdf');
+        });
+
+        document.getElementById("saveData").addEventListener("click", async () => {
+            const name = document.getElementById('inputName').value;
+            const aroma = parseFloat(document.getElementById('inputAroma').value);
+            const flavor = parseFloat(document.getElementById('inputSabor').value);
+            const color = parseFloat(document.getElementById('inputColor').value);
+            const texture = parseFloat(document.getElementById('inputTextura').value);
+
+            const data = { name, aroma, flavor, color, texture };
+
+            try {
+                const response = await fetch('/api/save-sensorial-data/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Datos guardados correctamente');
+                    fetchData(); // Refresh the charts with the new data
+                    // Clear the input fields
+                    document.getElementById('inputName').value = '';
+                    document.getElementById('inputAroma').value = '';
+                    document.getElementById('inputSabor').value = '';
+                    document.getElementById('inputColor').value = '';
+                    document.getElementById('inputTextura').value = '';
+                } else {
+                    alert(`Error: ${result.error || 'Algo salió mal.'}`);
+                }
+            } catch (error) {
+                alert(`Error de conexión: ${error.message}`);
+            }
         });
     });
 </script>
