@@ -97,3 +97,16 @@ canvas {
     max-width: 80%; /* Reduced from 100% to 80% */
     max-height: 280px; /* Reduced from 350px to 280px */
 }
+
+.modal-content {
+    background-color: #343a40; /* Similar to the dark theme of the application */
+    color: white;
+}
+
+.modal-header, .modal-footer {
+    border-color: #495057; /* Slightly lighter for contrast */
+}
+
+.btn-close {
+    filter: invert(1); /* Invert the close button color for dark background */
+}

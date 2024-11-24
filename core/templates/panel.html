@@ -25,13 +25,15 @@
         <input type="number" id="inputColor" placeholder="Color (0-5)" step="0.1" min="0" max="5">
         <input type="number" id="inputTextura" placeholder="Textura (0-5)" step="0.1" min="0" max="5">
         <button id="saveData" disabled>Guardar Datos</button>
-        <button id="downloadPdf">Exportar PDF</button>
+        {% if user.rol_id == 2 or user.rol_id == 3 %}
+            <button id="downloadPdf">Exportar PDF</button>
+        {% endif %}
     </div>
 
     <!-- Contenedor de botones de predicción y detección -->
     <div class="button-container">
-        <button id="predictResults">Predicción de Resultados</button>
-        <button id="detectAnomalies">Detección de Anomalías</button>
+        <button id="predictResults" data-bs-toggle="modal" data-bs-target="#predictionModal">Predicción de Resultados</button>
+        <button id="detectAnomalies" data-bs-toggle="modal" data-bs-target="#anomalyModal">Detección de Anomalías</button>
     </div>
 
     <!-- Contenedor de las gráficas -->
@@ -47,6 +49,58 @@
         </div>
         <div class="chart-item">
             <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <div class="modal fade" id="predictionModal" tabindex="-1" aria-labelledby="predictionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="predictionModalLabel">Predicción de Resultados</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Los resultados simulados indican que el perfil sensorial es óptimo en aroma y textura, pero requiere ajustes en sabor.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="anomalyModal" tabindex="-1" aria-labelledby="anomalyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="anomalyModalLabel">Detección de Anomalías</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Se detectaron anomalías en las muestras 2 y 4, específicamente en el parámetro de color.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="saveDataModal" tabindex="-1" aria-labelledby="saveDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saveDataModalLabel">Guardar Datos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="saveDataMessage">
+                    <!-- Message will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -160,9 +214,31 @@
             });
         });
 
-        document.getElementById("downloadPdf").addEventListener("click", () => {
+        document.getElementById("downloadPdf").addEventListener("click", async () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+
+            // Get user information
+            const userResponse = await fetch('/api/get-user-info/');
+            const userInfo = await userResponse.json();
+            const evaluatorName = userInfo.first_name && userInfo.last_name ? `${userInfo.first_name} ${userInfo.last_name}` : userInfo.username;
+
+            // Add record to SensoryEvaluation model
+            try {
+                const response = await fetch('/api/add-sensory-evaluation/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ evaluator_name: evaluatorName, comments: '' }),
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    alert(`Error: ${result.error || 'Algo salió mal.'}`);
+                    return;
+                }
+            } catch (error) {
+                alert(`Error de conexión: ${error.message}`);
+                return;
+            }
 
             // Título y texto "quemado"
             doc.setFontSize(18);
@@ -212,7 +288,9 @@
                 });
                 const result = await response.json();
                 if (response.ok) {
-                    alert('Datos guardados correctamente');
+                    document.getElementById('saveDataMessage').innerText = 'Datos guardados correctamente';
+                    const saveDataModal = new bootstrap.Modal(document.getElementById('saveDataModal'));
+                    saveDataModal.show();
                     fetchData(); // Refresh the charts with the new data
                     // Clear the input fields
                     document.getElementById('inputName').value = '';
@@ -222,10 +300,14 @@
                     document.getElementById('inputTextura').value = '';
                     document.getElementById('saveData').disabled = true; // Disable the button again
                 } else {
-                    alert(`Error: ${result.error || 'Algo salió mal.'}`);
+                    document.getElementById('saveDataMessage').innerText = `Error: ${result.error || 'Algo salió mal.'}`;
+                    const saveDataModal = new bootstrap.Modal(document.getElementById('saveDataModal'));
+                    saveDataModal.show();
                 }
             } catch (error) {
-                alert(`Error de conexión: ${error.message}`);
+                document.getElementById('saveDataMessage').innerText = `Error de conexión: ${error.message}`;
+                const saveDataModal = new bootstrap.Modal(document.getElementById('saveDataModal'));
+                saveDataModal.show();
             }
         });
     });

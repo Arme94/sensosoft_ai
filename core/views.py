@@ -6,8 +6,10 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Beer
-##from .models import Cerveza
+from django.contrib.auth.models import User
+from .models import Beer, SensoryEvaluation
+from django.utils.timezone import now
+from datetime import timedelta
 
 def login(request):
     return render(request, 'login.html', {})  # Asegúrate de usar la plantilla de login
@@ -35,7 +37,8 @@ def home(request):
 
 @login_required
 def reports(request):
-    return render(request, 'reports.html', {})
+    evaluations = SensoryEvaluation.objects.all()
+    return render(request, 'reports.html', {'evaluations': evaluations})
 
 @login_required
 def panel(request):
@@ -68,7 +71,28 @@ def save_sensorial_data(request):
             return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-# @login_required
-# def lista_cervezas(request):
-#     cervezas = Cerveza.objects.all()
-#     return render(request, 'cervezas.html', {'cervezas': cervezas})
+@csrf_exempt
+def add_sensory_evaluation(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            evaluation = SensoryEvaluation(
+                evaluator_name=data['evaluator_name'],
+                comments=data['comments'],
+                evaluation_date=now() - timedelta(hours=5)
+            )
+            evaluation.save()
+            return JsonResponse({'message': 'Evaluación sensorial guardada correctamente'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@login_required
+def get_user_info(request):
+    user = request.user
+    user_info = {
+        'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name
+    }
+    return JsonResponse(user_info)

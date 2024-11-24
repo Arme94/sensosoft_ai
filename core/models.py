@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
+from django.utils.timezone import now
+from datetime import timedelta
 
 # class Cerveza(models.Model):
 #     nombre = models.CharField(max_length=100)
@@ -64,7 +66,7 @@ class Beer(models.Model):
 
 class SensoryEvaluation(models.Model):
     evaluator_name = models.CharField(max_length=100)
-    evaluation_date = models.DateField(auto_now_add=True)
+    evaluation_date = models.DateTimeField(default=now() - timedelta(hours=5))
     comments = models.TextField()
 
     def __str__(self):
