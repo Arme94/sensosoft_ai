@@ -40,14 +40,26 @@ class Beer(models.Model):
 
     @staticmethod
     def get_average_sensory_data():
-        beers = Beer.objects.all()
+        beer_names = ['carmesi', 'lecter', 'sauer', 'prendida', 'tramadora', 'la 10']
         data = {
-            'labels': [beer.name for beer in beers],
-            'aroma': [beer.aroma for beer in beers],
-            'flavor': [beer.flavor for beer in beers],
-            'color': [beer.color for beer in beers],
-            'texture': [beer.texture for beer in beers]
+            'labels': beer_names,
+            'aroma': [],
+            'flavor': [],
+            'color': [],
+            'texture': []
         }
+        for name in beer_names:
+            beers = Beer.objects.filter(name=name)
+            if beers.exists():
+                data['aroma'].append(beers.aggregate(models.Avg('aroma'))['aroma__avg'])
+                data['flavor'].append(beers.aggregate(models.Avg('flavor'))['flavor__avg'])
+                data['color'].append(beers.aggregate(models.Avg('color'))['color__avg'])
+                data['texture'].append(beers.aggregate(models.Avg('texture'))['texture__avg'])
+            else:
+                data['aroma'].append(0)
+                data['flavor'].append(0)
+                data['color'].append(0)
+                data['texture'].append(0)
         return data
 
 class SensoryEvaluation(models.Model):
