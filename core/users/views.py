@@ -5,6 +5,8 @@ from .UserCreationForm import UsuarioCreationForm
 from .UserChangeForm import UsuarioChangeForm
 from django.contrib.auth import authenticate, login
 from django.contrib.messages import get_messages
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 def user_login(request):
     storage = get_messages(request)
@@ -70,14 +72,34 @@ def user_delete(request, id):
 
 def update_user_info(request, id):
     user = get_object_or_404(Usuario, id=id)
-
     if request.method == 'POST':
-        user_form = UsuarioChangeForm(request.POST, instance=user)
-        if user_form.is_valid():
-            user_form.save()
-            messages.success(request, 'Información actualizada correctamente.')
-            return redirect('users')
+        password_form = PasswordChangeForm(request.user, request.POST)
+        if password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Contraseña actualizada correctamente.')
+            return render(request, 'users/template/update_user_info.html', {'password_form': password_form, 'success': True})
+        else:
+            messages.error(request, 'Por favor corrige los errores a continuación.')
     else:
-        user_form = UsuarioChangeForm(instance=user)
+        password_form = PasswordChangeForm(request.user)
     
-    return render(request, 'users/template/update_user_info.html', {'user_form': user_form})
+    # Add CSS classes to form fields
+    for field in password_form.fields.values():
+        field.widget.attrs['class'] = 'form-control required-field'
+    
+    return render(request, 'users/template/update_user_info.html', {'password_form': password_form})
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Tu contraseña ha sido actualizada exitosamente.')
+            return redirect('users')
+        else:
+            messages.error(request, 'Por favor corrige los errores a continuación.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'users/template/update_user_info.html', {'form': form})

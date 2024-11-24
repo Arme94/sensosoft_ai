@@ -15,6 +15,8 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('who/quienesomos', views.who, name='who'),
     path('api/get-sensorial-data/', get_sensorial_data, name='get_sensorial_data'),
-    path('api/save-sensorial-data/', save_sensorial_data, name='save_sensorial_data')
+    path('api/save-sensorial-data/', save_sensorial_data, name='save_sensorial_data'),
+    path('api/add-sensory-evaluation/', views.add_sensory_evaluation, name='add_sensory_evaluation'),
+    path('api/get-user-info/', views.get_user_info, name='get_user_info')
     
 ]
