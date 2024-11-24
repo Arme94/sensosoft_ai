@@ -33,6 +33,11 @@ h1 {
     text-align: center;
 }
 
+.inputs-container select {
+    width: 250px; /* Ajustar el ancho del campo "Nombre de la Cerveza" */
+    text-align: left; /* Alinear las opciones a la izquierda */
+}
+
 .inputs-container button {
     padding: 10px 15px;
     background-color: #007BFF;

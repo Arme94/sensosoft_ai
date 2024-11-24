@@ -63,11 +63,10 @@ class Beer(models.Model):
         return data
 
 class SensoryEvaluation(models.Model):
-    beer = models.ForeignKey(Beer, on_delete=models.CASCADE)
     evaluator_name = models.CharField(max_length=100)
     evaluation_date = models.DateField(auto_now_add=True)
     comments = models.TextField()
 
     def __str__(self):
-        return f"Evaluation of {self.beer.name} by {self.evaluator_name}"
+        return f"Evaluation by {self.evaluator_name}"
 
