@@ -10,26 +10,29 @@
 {% block content_option %}
     <form method="POST" class="container">
         {% csrf_token %}
-
-        {% for field in user_form %}
+        
+        <h3>Cambiar Contraseña</h3>
+        
+        {% for field in password_form %}
             {% if field.errors %}
                 <div class="alert alert-danger">
                     {{ field.errors }}
                 </div>
             {% endif %}
         {% endfor %}
+        
         <div class="row mb-3">
             <div class="col-md-4 ps-2">
-                <label for="id_old_password">Contraseña Vieja</label>
-                <input type="password" name="old_password" id="id_old_password" class="form-control">
+                <label for="{{ password_form.old_password.id_for_label }}">Contraseña Vieja</label>
+                {{ password_form.old_password }}
             </div>
             <div class="col-md-4 px-2">
-                <label for="id_new_password">Nueva Contraseña</label>
-                <input type="password" name="new_password" id="id_new_password" class="form-control">
+                <label for="{{ password_form.new_password1.id_for_label }}">Nueva Contraseña</label>
+                {{ password_form.new_password1 }}
             </div>
             <div class="col-md-4 pe-2">
-                <label for="id_confirm_password">Repetir Contraseña</label>
-                <input type="password" name="confirm_password" id="id_confirm_password" class="form-control">
+                <label for="{{ password_form.new_password2.id_for_label }}">Repetir Contraseña</label>
+                {{ password_form.new_password2 }}
             </div>
         </div>
         
@@ -39,4 +42,11 @@
         </div>
         
     </form>
+
+    {% if success %}
+        <script>
+            alert("Contraseña actualizada correctamente.");
+            window.location.href = "{% url 'users' %}";
+        </script>
+    {% endif %}
 {% endblock %}
