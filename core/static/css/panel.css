@@ -24,7 +24,8 @@ h1 {
     margin-bottom: 20px;
 }
 
-.inputs-container input {
+.inputs-container input,
+.inputs-container select {
     padding: 10px;
     width: 130px;
     border: 1px solid #ddd;
@@ -41,7 +42,12 @@ h1 {
     cursor: pointer;
 }
 
-.inputs-container button:hover {
+.inputs-container button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.inputs-container button:hover:enabled {
     background-color: #0056b3;
 }
 

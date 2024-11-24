@@ -1,0 +1,16 @@
+{% extends 'layouts/content_base.html' %}
+{% load static %}
+
+{% block style_option %}
+<link rel="stylesheet" href="{% static 'css/reports.css' %}" />
+{% endblock %}
+
+{% block content_option %}
+<div class="container-fluid">
+    <h1 class="text-center">Informes</h1>
+    <div class="construction-message">
+        <h2>En construcción</h2>
+        <p>Estamos trabajando para ofrecerte la mejor experiencia. Vuelve pronto para ver los informes completos.</p>
+    </div>
+</div>
+{% endblock %}

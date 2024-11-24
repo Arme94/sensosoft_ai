@@ -11,12 +11,20 @@
 
     <!-- Contenedor de campos de entrada -->
     <div class="inputs-container">
-        <input type="text" id="inputName" placeholder="Nombre de la Cerveza">
+        <select id="inputName">
+            <option value="" disabled selected>Nombre de la Cerveza</option>
+            <option value="carmesi">Carmesi</option>
+            <option value="lecter">Lecter</option>
+            <option value="sauer">Sauer</option>
+            <option value="prendida">Prendida</option>
+            <option value="tramadora">Tramadora</option>
+            <option value="la 10">La 10</option>
+        </select>
         <input type="number" id="inputAroma" placeholder="Aroma (0-5)" step="0.1" min="0" max="5">
         <input type="number" id="inputSabor" placeholder="Sabor (0-5)" step="0.1" min="0" max="5">
         <input type="number" id="inputColor" placeholder="Color (0-5)" step="0.1" min="0" max="5">
         <input type="number" id="inputTextura" placeholder="Textura (0-5)" step="0.1" min="0" max="5">
-        <button id="saveData">Guardar Datos</button>
+        <button id="saveData" disabled>Guardar Datos</button>
         <button id="downloadPdf">Exportar PDF</button>
     </div>
 
@@ -143,6 +151,15 @@
         // Call fetchData on page load
         fetchData();
 
+        // Habilitar/deshabilitar el botón de guardar datos
+        const inputs = document.querySelectorAll('#inputName, #inputAroma, #inputSabor, #inputColor, #inputTextura');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+                document.getElementById('saveData').disabled = !allFilled;
+            });
+        });
+
         document.getElementById("downloadPdf").addEventListener("click", () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -203,6 +220,7 @@
                     document.getElementById('inputSabor').value = '';
                     document.getElementById('inputColor').value = '';
                     document.getElementById('inputTextura').value = '';
+                    document.getElementById('saveData').disabled = true; // Disable the button again
                 } else {
                     alert(`Error: ${result.error || 'Algo salió mal.'}`);
                 }

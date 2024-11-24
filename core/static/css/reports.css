@@ -1,0 +1,28 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.container-fluid {
+    text-align: center;
+    padding: 50px;
+}
+
+.construction-message {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.construction-message h2 {
+    color: #ff6f61;
+    margin-bottom: 10px;
+}
+
+.construction-message p {
+    color: #333;
+}
