@@ -1,0 +1,93 @@
+.users-container {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.users-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.users-table th,
+.users-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.users-table th {
+    background-color: #444;
+    font-weight: bold;
+}
+
+.users-table tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.users-table tr:hover {
+    background-color: #444;
+}
+
+.actions {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.btn {
+    padding: 8px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-view {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-update {
+    background-color: #2196f3;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.no-users-message {
+    font-style: italic;
+    color: #666;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.create-user-container {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.btn-create {
+    background-color: #4caf50;
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    font-size: 16px;
+}

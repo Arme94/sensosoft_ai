@@ -1,0 +1,13 @@
+{% extends 'layouts/content_base.html' %}
+{% load static %}
+
+{% block title %}SENSOSOFT IA - Eliminar Usuario{% endblock %}
+
+{% block content_option %}
+    <h2>¿Estás seguro de que quieres eliminar al usuario {{ user.username }}?</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a href="{% url 'users' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+{% endblock %}
